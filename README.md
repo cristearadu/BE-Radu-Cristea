@@ -102,6 +102,32 @@ After each run, the following artifacts are uploaded:
 ![img_1.png](img_1.png)
 ---
 
+## Technology Stack Justification
+
+### Why Python + Pytest + Requests?
+This project is built using **Python**, **Pytest**, and **Requests**, chosen for their efficiency, flexibility, and extensive support in API testing. Here’s why:
+
+1. **Python**
+   - Readable and concise syntax, ideal for writing maintainable test code.
+   - Strong ecosystem with libraries supporting automation, API testing, and reporting.
+   
+2. **Pytest**
+   - Powerful and scalable testing framework with built-in fixtures, parameterization, and parallel execution.
+   - Provides detailed assertion debugging and supports markers for test categorization (e.g., `smoke`, `regression`).
+   - Provides usage of fixture support as it makes setup and teardown run in different scopes.
+   
+3. **Requests**
+   - Simplifies API interactions with easy-to-use HTTP methods and response handling.
+   - Integrates seamlessly with Pytest for efficient validation of API responses.
+   
+The combination of these technologies allows for:
+- **Efficient test execution** with parallelization (`pytest-xdist`).
+- **Scalable test organization** using layered architecture and design patterns.
+- **Comprehensive reporting** through JUnit XML and HTML reports.
+- **Seamless integration** into CI/CD pipelines via GitHub Actions.
+
+---
+
 ## Design Patterns & Architecture
 
 Key patterns used and their implementation details:
