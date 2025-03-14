@@ -1,0 +1,55 @@
+name: API Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: "0 0 * * *"  # Runs daily at midnight UTC
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest pytest-html pytest-xdist
+
+      - name: Run tests
+        run: pytest -n auto -m regression --html=report.html --self-contained-html
+
+      - name: Upload HTML Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-report
+          path: report.html
+
+      - name: Upload Logs
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-logs
+          path: output/
+
+      - name: Publish Test Summary
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: report.html
+
+      - name: Deploy Report to GitHub Pages
+        if: success()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
