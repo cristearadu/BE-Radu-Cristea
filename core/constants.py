@@ -5,6 +5,8 @@ ROOT_WORKING_DIRECTORY = os.path.dirname(os.path.dirname(os.path.abspath(__file_
 LOGS_FOLDER = 'output'
 JSONPLACEHOLDER_BASE_URL = "https://jsonplaceholder.typicode.com"
 EMAIL_REGEX = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+RESPONSE_TIME_MS = 500
+MINIMAL_TOTAL_COMMENTS = 10
 
 
 class HTTPStatusCodes(Enum):

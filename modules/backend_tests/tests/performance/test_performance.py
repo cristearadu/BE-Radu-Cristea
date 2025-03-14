@@ -2,6 +2,7 @@ import pytest
 import time
 
 from modules.backend_tests.tests.test_data.test_user_comments_data import VALID_USERS
+from core import RESPONSE_TIME_MS, MINIMAL_TOTAL_COMMENTS
 
 
 @pytest.mark.performance
@@ -21,7 +22,8 @@ def test_large_api_response(user_comments_helper, test_case, username):
 
         total_comments += len(comments)
 
-    assert total_comments > 10, f"Expected more comments in large response, but got only {total_comments}"
+    assert total_comments > MINIMAL_TOTAL_COMMENTS, \
+        f"Expected more comments in large response, but got only {total_comments}"
     pytest.logger.info(f"Total comments retrieved across posts: {total_comments}")
 
 
@@ -41,5 +43,5 @@ def test_api_response_time(user_comments_helper, test_case, username):
         start_time = time.time()
         _ = user_comments_helper.get_post_comments(post_id)
         response_time = (time.time() - start_time) * 1000  # convert to ms
-        assert response_time < 500, f"API response time too slow for post {post_id}: {response_time:.2f}ms"
+        assert response_time < RESPONSE_TIME_MS, f"API response time too slow for post {post_id}: {response_time:.2f}ms"
         pytest.logger.info(f"API response time for post {post_id}: {response_time:.2f}ms")
