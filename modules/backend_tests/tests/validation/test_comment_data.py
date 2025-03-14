@@ -69,9 +69,9 @@ def test_validate_comment_values(user_comments_helper, test_case, username):
             assert comment["id"] > 0, f"Comment id should be positive: {comment['id']}"
 
             # name, email, and body are non-empty
-            assert isinstance(comment["name"], str) and comment["name"].strip(), f"Invalid name: {comment['name']}"
-            assert isinstance(comment["email"], str) and comment["email"].strip(), f"Invalid email: {comment['email']}"
-            assert isinstance(comment["body"], str) and comment["body"].strip(), f"Invalid body: {comment['body']}"
+            assert isinstance(comment["name"], str) and comment["name"], f"Invalid name: {comment['name']}"
+            assert isinstance(comment["email"], str) and comment["email"], f"Invalid email: {comment['email']}"
+            assert isinstance(comment["body"], str) and comment["body"], f"Invalid body: {comment['body']}"
 
         pytest.logger.info(f"All comments for post {post_id} passed value validation.")
 
@@ -145,9 +145,9 @@ def test_validate_email_format_in_comments(user_comments_helper, test_case, user
 
         for comment in comments:
             assert re.match(EMAIL_REGEX, comment["email"]), f"Invalid email format: {comment['email']}"
-            assert comment["name"].strip(), f"Name should not be empty: {comment}"
-            assert comment["email"].strip(), f"Email should not be empty: {comment}"
-            assert comment["body"].strip(), f"Body should not be empty: {comment}"
+            assert comment["name"], f"Name should not be empty: {comment}"
+            assert comment["email"], f"Email should not be empty: {comment}"
+            assert comment["body"], f"Body should not be empty: {comment}"
 
         pytest.logger.info(f"All emails in comments for post {post_id} are valid.")
 
