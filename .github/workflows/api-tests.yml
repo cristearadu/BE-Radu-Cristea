@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -28,13 +28,19 @@ jobs:
           pip install pytest pytest-html pytest-xdist
 
       - name: Run tests
-        run: pytest -n auto -m regression --html=report.html --self-contained-html
+        run: pytest -n auto -m regression --html=report.html --self-contained-html --junitxml=report.xml
 
       - name: Upload HTML Report
         uses: actions/upload-artifact@v4
         with:
           name: test-report
           path: report.html
+
+      - name: Upload XML Report (for GitHub Actions)
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-xml
+          path: report.xml
 
       - name: Upload Logs
         uses: actions/upload-artifact@v4
@@ -45,7 +51,7 @@ jobs:
       - name: Publish Test Summary
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
-          files: report.html
+          files: report.xml  # Use XML instead of HTML
 
       - name: Deploy Report to GitHub Pages
         if: success()
