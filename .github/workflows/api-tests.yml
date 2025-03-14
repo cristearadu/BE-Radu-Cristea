@@ -1,21 +1,26 @@
-name: API Tests
+name: API Tests  # Name of the workflow
 
 on:
+  # Runs tests on every push to the main branch
   push:
     branches:
       - main
+
+  # Runs tests on every pull request to the main branch
   pull_request:
     branches:
       - main
+
   schedule:
-    - cron: "0 0 * * *"  # Runs daily at midnight UTC
+    - cron: "0 0 * * *"  # runs daily
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # runner OS
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -31,27 +36,24 @@ jobs:
         run: pytest -n auto -m regression --html=report.html --self-contained-html --junitxml=report.xml
 
       - name: Upload HTML Report
+        # Stores the test report as an artifact so it can be downloaded from GitHub Actions
         uses: actions/upload-artifact@v4
         with:
           name: test-report
           path: report.html
 
-      - name: Upload XML Report (for GitHub Actions)
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results-xml
-          path: report.xml
-
       - name: Upload Logs
+        # stores log files as an artifact
         uses: actions/upload-artifact@v4
         with:
           name: test-logs
           path: output/
 
       - name: Publish Test Summary
+        # Parses JUnit XML reports and adds a test summary in PRs & GitHub Actions UI
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
-          files: report.xml  # Use XML instead of HTML
+          files: report.xml  # Must be an XML file, not HTML
 
       - name: Deploy Report to GitHub Pages
         if: success()
