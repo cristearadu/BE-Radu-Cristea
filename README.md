@@ -77,15 +77,37 @@ pytest -m performance # Run performance tests
 
 ## Continuous Integration (CI/CD)
 ### GitHub Actions Workflow
-The repository includes a GitHub Actions workflow (`.github/workflows/api-tests.yml`) to automate test execution on:
+This repository includes a GitHub Actions workflow (`.github/workflows/api-tests.yml`) to automate test execution on:
 - **Pushes & Pull Requests** to `main`
 - **Scheduled Runs** (every midnight UTC)
+- **Manual Trigger** via GitHub Actions (workflow dispatch)
 
 ### Running Tests in CI/CD
-Tests are executed in GitHub Actions using the following command:
+You can **manually trigger** tests from GitHub Actions by selecting:
+- **Branch** to run the tests on
+- **Test suite** (`smoke`, `regression`, `validation`, `negative`, `performance`)
+
+Alternatively, tests are executed in CI/CD using:
+```sh
+pytest -n auto -m <test_suite> --junitxml=report.xml --html=report.html --self-contained-html
+```
+Example:
 ```sh
 pytest -n auto -m regression --junitxml=report.xml --html=report.html --self-contained-html
 ```
+
+### Running Tests Manually in GitHub Actions
+1. Navigate to the **Actions** tab in the GitHub repository.
+2. Select the **API Tests** workflow.
+3. Click **"Run workflow"**.
+4. Choose:
+   - **Branch** to run tests on.
+   - **Test suite** (`smoke`, `regression`, etc.).
+5. Click **Run workflow** to start the tests.
+
+![img_3.png](img_3.png)
+### Running Tests Manually in GitHub Actions
+
 
 ### Test Artifacts
 After each run, the following artifacts are uploaded:
