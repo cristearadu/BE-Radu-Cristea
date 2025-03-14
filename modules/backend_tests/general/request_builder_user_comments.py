@@ -6,8 +6,8 @@ from core.request_builder import http_request
 
 class JSONPlaceholderEndpoints(Enum):
     GET_USERS = ("GET", f"{JSONPLACEHOLDER_BASE_URL}/users", "GET_USERS")
-    GET_POSTS = ("GET", f"{JSONPLACEHOLDER_BASE_URL}/posts/{{user_id}}", "GET_POSTS")
-    GET_COMMENTS = ("GET", f"{JSONPLACEHOLDER_BASE_URL}/comments?postId={{post_id}}", "GET_COMMENTS")
+    GET_USER_POSTS = ("GET", f"{JSONPLACEHOLDER_BASE_URL}/users/{{user_id}}/posts", "GET_USER_POSTS")
+    GET_POST_COMMENTS = ("GET", f"{JSONPLACEHOLDER_BASE_URL}/comments?postId={{post_id}}", "GET_COMMENTS")
 
     def __init__(self, request_type, path, switcher):
         self.request_type = request_type
@@ -22,16 +22,18 @@ class JSONPlaceholderController:
                 http_request,
                 JSONPlaceholderEndpoints.GET_USERS.request_type,
                 JSONPlaceholderEndpoints.GET_USERS.path,
+                headers, None, None
+            ),
+            JSONPlaceholderEndpoints.GET_USER_POSTS.switcher: partial(
+                http_request,
+                JSONPlaceholderEndpoints.GET_USER_POSTS.request_type,
+                JSONPlaceholderEndpoints.GET_USER_POSTS.path.format(user_id=kwargs.get("user_id")),
                 headers
             ),
-            JSONPlaceholderEndpoints.GET_POSTS.switcher: partial(
+            JSONPlaceholderEndpoints.GET_POST_COMMENTS.switcher: partial(
                 http_request,
-                JSONPlaceholderEndpoints.GET_POSTS.path.format(user_id=kwargs.get("user_id")),
-                headers
-            ),
-            JSONPlaceholderEndpoints.GET_COMMENTS.switcher: partial(
-                http_request,
-                JSONPlaceholderEndpoints.GET_COMMENTS.path.format(post_id=kwargs.get("post_id")),
+                JSONPlaceholderEndpoints.GET_POST_COMMENTS.request_type,
+                JSONPlaceholderEndpoints.GET_POST_COMMENTS.path.format(post_id=kwargs.get("post_id")),
                 headers
             ),
         }
