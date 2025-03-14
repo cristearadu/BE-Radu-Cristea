@@ -33,7 +33,7 @@ jobs:
           pip install pytest pytest-html pytest-xdist
 
       - name: Run tests
-        run: pytest -n auto -m regression --html=report.html --self-contained-html --junitxml=report.xml
+        run: pytest -n auto -m regression --html=report.html --junitxml=report.xml --self-contained-html
 
       - name: Upload HTML Report
         # Stores the test report as an artifact so it can be downloaded from GitHub Actions
