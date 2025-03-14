@@ -1,19 +1,32 @@
-name: API Tests  # Name of the workflow
+name: API Tests  # Workflow name
 
 on:
-  # Runs tests on every push to the main branch
   push:
     branches:
       - main
-
-  # Runs tests on every pull request to the main branch
   pull_request:
     branches:
       - main
-
   schedule:
-    - cron: "0 0 * * *"  # runs daily
+    - cron: "0 0 * * *"  # Runs daily at midnight UTC
   workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to run tests on"
+        required: true
+        default: "main"
+        type: string
+      test_type:
+        description: "Test suite to run (smoke, regression, validation, negative, performance)"
+        required: true
+        default: "regression"
+        type: choice
+        options:
+          - smoke
+          - regression
+          - validation
+          - negative
+          - performance
 
 jobs:
   test:
@@ -22,6 +35,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.branch }}
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -34,7 +49,7 @@ jobs:
           pip install pytest pytest-html pytest-xdist
 
       - name: Run tests
-        run: pytest -n auto -m regression --html=report.html --junitxml=report.xml --self-contained-html
+        run: pytest -n auto -v -m ${{ github.event.inputs.test_type }} --html=report.html --junitxml=report.xml --self-contained-html
 
       - name: Upload HTML Report
         # Stores the test report as an artifact so it can be downloaded from GitHub Actions
