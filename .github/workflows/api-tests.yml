@@ -27,10 +27,8 @@ jobs:
         with:
           python-version: 3.10.8
 
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-          pip install pytest pytest-html pytest-xdist
+      - name: Run Setup Script
+        run: make setup
 
       - name: Run tests
         run: pytest -n auto -m regression --html=report.html --junitxml=report.xml --self-contained-html
