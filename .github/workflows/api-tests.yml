@@ -49,7 +49,7 @@ jobs:
           pip install pytest pytest-html pytest-xdist
 
       - name: Run tests
-        run: pytest -n auto -v -m ${{ github.event.inputs.test_type }} --html=report.html --junitxml=report.xml --self-contained-html
+        run: pytest -n auto -v -m "${{ github.event.inputs.test_type }}" --html=report.html --junitxml=report.xml --self-contained-html
 
       - name: Upload HTML Report
         # Stores the test report as an artifact so it can be downloaded from GitHub Actions
